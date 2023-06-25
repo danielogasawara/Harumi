@@ -60,7 +60,7 @@ const command: SlashCommand = {
               }
             )
             .setFooter({
-              text: `https://www.pixiv.net/en/artworks/${artwork.illustID})`,
+              text: `https://www.pixiv.net/en/artworks/${artwork.illustID}`,
             })
             .setImage('attachment://image.jpg'),
         ],
