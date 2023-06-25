@@ -16,13 +16,13 @@ module.exports = () => {
       console.log(
         color(
           'text',
-          `🍃 MongoDB conexão ${color('variable', 'estabelecida.')}`
+          `🍃 MongoDB a conexão foi ${color('variable', 'estabelecida.')}`
         )
       )
     )
     .catch(() =>
       console.log(
-        color('text', `🍃 MongoDB conexão ${color('error', 'falhou.')}`)
+        color('text', `🍃 MongoDB a conexão ${color('error', 'falhou.')}`)
       )
     );
 };

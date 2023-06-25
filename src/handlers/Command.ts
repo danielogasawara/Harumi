@@ -36,19 +36,19 @@ module.exports = (client: Client) => {
       console.log(
         color(
           'text',
-          `🔥 Successfully loaded ${color(
+          `🔥 Carregado com sucesso ${color(
             'variable',
             data.length
-          )} slash command(s)`
+          )} comando(s) slash`
         )
       );
       console.log(
         color(
           'text',
-          `🔥 Successfully loaded ${color(
+          `🔥 Carregado com sucesso ${color(
             'variable',
             commands.length
-          )} command(s)`
+          )} comando(s)`
         )
       );
     })
