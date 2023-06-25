@@ -1,16 +1,16 @@
-import { setGuildOption } from "../functions";
-import { Command } from "../types";
+import { setGuildOption } from '../functions';
+import { Command } from '../types';
 
 const command: Command = {
-  name: "mudarprefixo",
+  name: 'mudarprefixo',
   execute: (message, args) => {
     let prefix = args[1];
-    if (!prefix) return message.channel.send("Nenhum prefixo digitado.");
+    if (!prefix) return message.channel.send('Nenhum prefixo digitado.');
     if (!message.guild) return;
-    setGuildOption(message.guild, "prefix", prefix);
-    message.channel.send("Prefixo alterado com sucesso!");
+    setGuildOption(message.guild, 'prefix', prefix);
+    message.channel.send('Prefixo alterado com sucesso!');
   },
-  permissions: ["Administrator"],
+  permissions: ['Administrator'],
   aliases: [],
 };
 

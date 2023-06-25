@@ -1,9 +1,9 @@
-import { Guild } from "discord.js";
-import GuildModel from "../schemas/Guild";
-import { BotEvent } from "../types";
+import { Guild } from 'discord.js';
+import GuildModel from '../schemas/Guild';
+import { BotEvent } from '../types';
 
 const event: BotEvent = {
-  name: "guildCreate",
+  name: 'guildCreate',
   execute: (guild: Guild) => {
     let newGuild = new GuildModel({
       guildID: guild.id,

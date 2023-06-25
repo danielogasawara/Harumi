@@ -1,8 +1,8 @@
-import { PermissionFlagsBits } from "discord.js";
-import { Command } from "../types";
+import { PermissionFlagsBits } from 'discord.js';
+import { Command } from '../types';
 
 const command: Command = {
-  name: "teste",
+  name: 'teste',
   execute: (message, args) => {
     let toGreet = message.mentions.members?.first();
     message.channel.send(
@@ -10,8 +10,8 @@ const command: Command = {
     );
   },
   cooldown: 10,
-  aliases: ["digaola"],
-  permissions: ["Administrator", PermissionFlagsBits.ManageEmojisAndStickers], // to test
+  aliases: ['digaola'],
+  permissions: ['Administrator', PermissionFlagsBits.ManageEmojisAndStickers], // to test
 };
 
 export default command;

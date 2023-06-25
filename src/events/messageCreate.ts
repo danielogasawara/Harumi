@@ -1,27 +1,27 @@
-import { ChannelType, Message } from "discord.js";
+import { ChannelType, Message } from 'discord.js';
 import {
   checkPermissions,
   getGuildOption,
   sendTimedMessage,
-} from "../functions";
-import { BotEvent } from "../types";
-import mongoose from "mongoose";
+} from '../functions';
+import { BotEvent } from '../types';
+import mongoose from 'mongoose';
 
 const event: BotEvent = {
-  name: "messageCreate",
+  name: 'messageCreate',
   execute: async (message: Message) => {
     if (!message.member || message.member.user.bot) return;
     if (!message.guild) return;
     let prefix = process.env.PREFIX;
     if (mongoose.connection.readyState === 1) {
-      let guildPrefix = await getGuildOption(message.guild, "prefix");
+      let guildPrefix = await getGuildOption(message.guild, 'prefix');
       if (guildPrefix) prefix = guildPrefix;
     }
 
     if (!message.content.startsWith(prefix)) return;
     if (message.channel.type !== ChannelType.GuildText) return;
 
-    let args = message.content.substring(prefix.length + 1).split(" ");
+    let args = message.content.substring(prefix.length + 1).split(' ');
     let command = message.client.commands.get(args[0]);
 
     if (!command) {
@@ -43,7 +43,7 @@ const event: BotEvent = {
       return sendTimedMessage(
         `
             Você não possui permissão para usar este comando. 
-            \n Permissão necessária: ${neededPermissions.join(", ")}
+            \n Permissão necessária: ${neededPermissions.join(', ')}
             `,
         message.channel,
         5000
