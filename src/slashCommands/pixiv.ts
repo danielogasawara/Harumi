@@ -4,7 +4,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import { SlashCommand } from '../types';
-import pixiv, { getArtwork, search } from '../utils/pixiv';
+import pixiv, { getArtwork, pixivLogo, search } from '../utils/pixiv';
 
 interface PixivEmbed {
   author: string;
@@ -54,17 +54,18 @@ const command: SlashCommand = {
             .addFields(
               { name: '🎨 Autor', value: embedPresets.author, inline: true },
               {
-                name: '📐 Dimensões',
+                name: '📏 Dimensões',
                 value: embedPresets.dimensions,
                 inline: true,
               }
             )
             .setFooter({
               text: `https://www.pixiv.net/en/artworks/${artwork.illustID}`,
+              iconURL: pixivLogo.url,
             })
             .setImage('attachment://image.jpg'),
         ],
-        files: [image],
+        files: [image, pixivLogo.image],
       });
     } catch (error) {
       console.error(error);
