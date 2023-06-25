@@ -1,28 +1,28 @@
-import mongoose from "mongoose";
-import { color } from "../functions";
+import mongoose from 'mongoose';
+import { color } from '../functions';
 
 module.exports = () => {
   const MONGO_URI = process.env.MONGO_URI;
   if (!MONGO_URI)
     return console.log(
-      color("text", `🍃 Mongo URI not found, ${color("error", "skipping.")}`)
+      color(
+        'text',
+        `🍃 Mongo URI não encontrada, ${color('error', 'ignorando.')}`
+      )
     );
   mongoose
     .connect(`${MONGO_URI}/${process.env.MONGO_DATABASE_NAME}`)
     .then(() =>
       console.log(
         color(
-          "text",
-          `🍃 MongoDB connection has been ${color("variable", "established.")}`
+          'text',
+          `🍃 MongoDB a conexão foi ${color('variable', 'estabelecida.')}`
         )
       )
     )
     .catch(() =>
       console.log(
-        color(
-          "text",
-          `🍃 MongoDB connection has been ${color("error", "failed.")}`
-        )
+        color('text', `🍃 MongoDB a conexão ${color('error', 'falhou.')}`)
       )
     );
 };

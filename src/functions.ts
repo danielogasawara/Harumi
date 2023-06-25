@@ -1,22 +1,21 @@
-import chalk from "chalk";
+import chalk from 'chalk';
 import {
   Guild,
   GuildMember,
   PermissionFlagsBits,
   PermissionResolvable,
-  PermissionsBitField,
   TextChannel,
-} from "discord.js";
-import GuildDB from "./schemas/Guild";
-import { GuildOption } from "./types";
-import mongoose from "mongoose";
+} from 'discord.js';
+import GuildDB from './schemas/Guild';
+import { GuildOption } from './types';
+import mongoose from 'mongoose';
 
-type colorType = "text" | "variable" | "error";
+type colorType = 'text' | 'variable' | 'error';
 
 const themeColors = {
-  text: "#ff8e4d",
-  variable: "#ff624d",
-  error: "#f5426c",
+  text: '#ff8e4d',
+  variable: '#ff624d',
+  error: '#f5426c',
 };
 
 export const getThemeColor = (color: colorType) =>
@@ -36,12 +35,12 @@ export const checkPermissions = (
   });
   if (neededPermissions.length === 0) return null;
   return neededPermissions.map((p) => {
-    if (typeof p === "string") return p.split(/(?=[A-Z])/).join(" ");
+    if (typeof p === 'string') return p.split(/(?=[A-Z])/).join(' ');
     else
       return Object.keys(PermissionFlagsBits)
         .find((k) => Object(PermissionFlagsBits)[k] === p)
         ?.split(/(?=[A-Z])/)
-        .join(" ");
+        .join(' ');
   });
 };
 
@@ -63,7 +62,7 @@ export const sendTimedMessage = (
 
 export const getGuildOption = async (guild: Guild, option: GuildOption) => {
   if (mongoose.connection.readyState === 0)
-    throw new Error("Banco de dados não conectado.");
+    throw new Error('Banco de dados não conectado.');
   let foundGuild = await GuildDB.findOne({ guildID: guild.id });
   if (!foundGuild) return null;
   return foundGuild.options[option];
@@ -75,7 +74,7 @@ export const setGuildOption = async (
   value: any
 ) => {
   if (mongoose.connection.readyState === 0)
-    throw new Error("Banco de dados não conectado.");
+    throw new Error('Banco de dados não conectado.');
   let foundGuild = await GuildDB.findOne({ guildID: guild.id });
   if (!foundGuild) return null;
   foundGuild.options[option] = value;

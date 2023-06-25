@@ -1,6 +1,7 @@
 import { Artwork, Illust, Pixiv } from '@ibaraki-douji/pixivts';
 import { randomInt } from 'node:crypto';
 import { color } from '../functions';
+import { AttachmentBuilder } from 'discord.js';
 
 const pixiv = new Pixiv();
 
@@ -12,7 +13,7 @@ if (pixivCookie && pixivUserAgent) {
   pixiv.staticLogin(pixivCookie, pixivUserAgent);
 } else {
   console.log(
-    color('text', `🖼️ Pixiv os cookies ou user-agente não foram encontrados.`)
+    color('text', `🖼️ Pixiv os cookies ou o user-agent não foram encontrados.`)
   );
 }
 
@@ -36,5 +37,10 @@ export async function getArtwork(searchResult: Artwork[]): Promise<Illust> {
 
   return artwork;
 }
+
+export const pixivLogo = {
+  image: new AttachmentBuilder(`./images/pixiv_icon.webp`),
+  url: 'attachment://pixiv_icon.webp',
+};
 
 export default pixiv;
