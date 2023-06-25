@@ -25,7 +25,7 @@ const command: SlashCommand = {
     try {
       await interaction.deferReply();
 
-      const input = interaction.options.getString('pesquisa');
+      const input = interaction.options.getString('pesquisar');
       const searchResult = input ? await search(input, 'safe') : false;
       const artwork = searchResult ? await getArtwork(searchResult) : false;
       const imageOfArtwork = artwork
