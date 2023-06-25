@@ -13,21 +13,20 @@ interface PixivEmbed {
 
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
-    .setName('pixiv18')
-    .setDescription('Envia uma imagem 18+ do pixiv.')
+    .setName('pixiv')
+    .setDescription('Envia uma imagem do pixiv.')
     .addStringOption((option) => {
       return option
         .setName('pesquisar')
         .setDescription('Digite o que deseja pesquisar no pixiv.')
         .setRequired(true);
-    })
-    .setNSFW(true),
+    }),
   execute: async (interaction) => {
     try {
       await interaction.deferReply();
 
       const input = interaction.options.getString('pesquisa');
-      const searchResult = input ? await search(input, 'r18') : false;
+      const searchResult = input ? await search(input, 'safe') : false;
       const artwork = searchResult ? await getArtwork(searchResult) : false;
       const imageOfArtwork = artwork
         ? await pixiv.download(new URL(artwork.urls[0].regular))
