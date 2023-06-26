@@ -29,13 +29,8 @@ export async function search(
   return searchResult;
 }
 
-export async function getArtwork(
-  searchResult: Artwork[]
-): Promise<Illust | false> {
+export async function getArtwork(searchResult: Artwork[]): Promise<Illust> {
   const artworksOnResult: number = searchResult.length;
-  if (artworksOnResult === 0) {
-    return false;
-  }
   const artwork = await pixiv.getIllustByID(
     searchResult[randomInt(artworksOnResult)].id
   );
