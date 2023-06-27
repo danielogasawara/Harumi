@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "start npx tsc && start"
+    "build": "npx tsc",
+    "start": "node ./build/index.js"
   },
   "keywords": [],
   "author": "Daniel Ogasawara",
-  "license": "ISC",
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "@discordjs/rest": "^1.7.1",
     "@ibaraki-douji/pixivts": "^2.4.1",
