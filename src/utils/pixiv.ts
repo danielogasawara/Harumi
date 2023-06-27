@@ -50,9 +50,6 @@ export async function getArtwork(searchResult: ISearchResult): Promise<Illust> {
   return artwork;
 }
 
-export const pixivLogo = {
-  image: new AttachmentBuilder(`./images/pixiv_icon.webp`),
-  url: 'attachment://pixiv_icon.webp',
-};
+export const pixivLogo = 'https://i.imgur.com/qm2lhiu.png';
 
 export default pixiv;
