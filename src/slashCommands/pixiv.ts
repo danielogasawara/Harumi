@@ -61,11 +61,11 @@ const command: SlashCommand = {
             )
             .setFooter({
               text: `https://www.pixiv.net/en/artworks/${artwork.illustID}`,
-              iconURL: pixivLogo.url,
+              iconURL: pixivLogo,
             })
             .setImage('attachment://image.jpg'),
         ],
-        files: [image, pixivLogo.image],
+        files: [image],
       });
     } catch (error) {
       console.error(error);
