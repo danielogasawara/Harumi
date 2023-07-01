@@ -47,6 +47,8 @@ declare global {
     interface ProcessEnv {
       DISCORD_TOKEN: string;
       CLIENT_ID: string;
+      PIXIV_COOKIE: string;
+      PIXIV_USER_AGENT: string;
       PREFIX: string;
       MONGO_URI: string;
       MONGO_DATABASE_NAME: string;
