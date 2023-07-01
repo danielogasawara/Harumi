@@ -11,7 +11,9 @@ module.exports = () => {
       )
     );
   mongoose
-    .connect(`${MONGO_URI}/${process.env.MONGO_DATABASE_NAME}`)
+    .connect(
+      `${MONGO_URI}/${process.env.MONGO_DATABASE_NAME}?retryWrites=true&w=majority`
+    )
     .then(() =>
       console.log(
         color(
