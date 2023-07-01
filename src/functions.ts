@@ -80,3 +80,13 @@ export const setGuildOption = async (
   foundGuild.options[option] = value;
   foundGuild.save();
 };
+
+export const deleteGuildFromDatabase = async (value: string) => {
+  if (mongoose.connection.readyState === 0)
+    throw new Error('Banco de dados não conectado.');
+  let foundGuild = await GuildDB.findOne({
+    guildID: value,
+  });
+  if (!foundGuild) return null;
+  foundGuild.deleteOne();
+};
