@@ -11,7 +11,7 @@ const command: Command = {
   },
   cooldown: 10,
   aliases: ['ola'],
-  permissions: ['Administrator', PermissionFlagsBits.ManageEmojisAndStickers], // to test
+  permissions: [],
 };
 
 export default command;
