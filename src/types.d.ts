@@ -45,7 +45,7 @@ export interface BotEvent {
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      DISCORD_TOKEN: string;
+      BOT_TOKEN: string;
       CLIENT_ID: string;
       PIXIV_COOKIE: string;
       PIXIV_USER_AGENT: string;
