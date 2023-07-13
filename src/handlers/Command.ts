@@ -26,7 +26,7 @@ module.exports = (client: Client) => {
     client.commands.set(command.name, command);
   });
 
-  const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
+  const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);
 
   rest
     .put(Routes.applicationCommands(process.env.CLIENT_ID), {
