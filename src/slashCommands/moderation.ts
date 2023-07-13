@@ -1,4 +1,5 @@
 import {
+  EmbedBuilder,
   PermissionFlagsBits,
   SlashCommandBuilder,
   TextChannel,
@@ -10,7 +11,7 @@ import { setTimeout as wait } from 'node:timers/promises';
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName('moderação')
-    .setDescription('Comandos que precisam da permissão de administrador.')
+    .setDescription('Comandos para moderação do servidor.')
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addSubcommand((subcommand) =>
       subcommand
@@ -22,6 +23,22 @@ const command: SlashCommand = {
             .setDescription('Quantidade de mensagens para serem apagadas.')
             .setMinValue(1)
             .setRequired(true);
+        })
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('expulsar')
+        .setDescription('Expulsa um usuário do seu servidor.')
+        .addUserOption((option) => {
+          return option
+            .setName('usuário')
+            .setDescription('Usuário que deseja expulsar.')
+            .setRequired(true);
+        })
+        .addStringOption((option) => {
+          return option
+            .setName('motivo')
+            .setDescription('Motivo por trás da expulsão.');
         })
     ),
   execute: async (interaction) => {
@@ -70,10 +87,54 @@ const command: SlashCommand = {
             });
         }
         break;
+      case 'expulsar':
+        const target = interaction.options.getUser('usuário', true);
+        if (target.id === interaction.user.id) {
+          interaction.reply({
+            content: 'Você não pode expulsar a si mesmo.',
+            ephemeral: true,
+          });
+          await wait(10000);
+          interaction.deleteReply();
+          return;
+        }
+        const reason =
+          interaction.options.getString('motivo', false) ??
+          'Motivo não especificado.';
+        const embedImage =
+          'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ2xtNXNyZWswdzVhdXQ0OWd0Y3VubGNvZ2RjcHQwbDU5aHUzZ3R0dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/AzXeweAMR6OBT1LUxy/giphy.gif';
+        const embed = new EmbedBuilder()
+          .setTitle(`${target.username} foi expulso(a)!`)
+          .setThumbnail(target.avatarURL())
+          .setColor('#35c1c8')
+          .setFields([
+            {
+              name: '🪪 Usuário',
+              value: `\`${target.username}\``,
+            },
+            {
+              name: '📜 Motivo',
+              value: reason,
+            },
+          ])
+          .setImage(embedImage)
+          .setFooter({
+            iconURL: interaction.user.avatarURL({
+              extension: 'webp',
+              forceStatic: true,
+            })!,
+            text: interaction.user.username,
+          });
 
+        return interaction.guild?.members
+          .kick(target)
+          .then(() => interaction.reply({ embeds: [embed] }))
+          .catch((error) => {
+            interaction.reply(genericErrorMessage);
+            console.error(error);
+          });
       default:
-        interaction.reply({ content: genericErrorMessage });
-        break;
+        return interaction.reply({ content: genericErrorMessage });
     }
   },
 };
