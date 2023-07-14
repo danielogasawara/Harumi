@@ -4,17 +4,22 @@ import {
   EmbedBuilder,
 } from 'discord.js';
 import { genericErrorMessage } from '../../utils/errors';
+import wait from '../../utils/wait';
 
 async function ban(interaction: ChatInputCommandInteraction<CacheType>) {
   const target = interaction.options.getUser('usuário', true);
   if (target.id === interaction.user.id) {
-    await interaction.reply('Você não pode banir a si mesmo.');
+    await interaction.reply({
+      content: 'Você não pode banir a si mesmo.',
+      ephemeral: true,
+    });
+    await wait(10000);
+    await interaction.deleteReply();
     return;
   }
   const reason = interaction.options.getString('motivo', true);
   const time = interaction.options.getInteger('histórico', true);
-  const embedImage =
-    'https://media.giphy.com/media/fe4dDMD2cAU5RfEaCU/giphy.gif';
+  const embedImage = 'https://tenor.com/bjPkT.gif';
   const embed = new EmbedBuilder()
     .setTitle(`${target.username} foi banido(a)!`)
     .setThumbnail(target.avatarURL())
