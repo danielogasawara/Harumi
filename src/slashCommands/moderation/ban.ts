@@ -7,8 +7,8 @@ import { genericErrorMessage } from '../../utils/errors';
 import wait from '../../utils/wait';
 
 async function ban(interaction: ChatInputCommandInteraction<CacheType>) {
-  const target = interaction.options.getUser('usuário', true);
-  if (target.id === interaction.user.id) {
+  const user = interaction.options.getUser('usuário', true);
+  if (user.id === interaction.user.id) {
     await interaction.reply({
       content: 'Você não pode banir a si mesmo.',
       ephemeral: true,
@@ -19,13 +19,18 @@ async function ban(interaction: ChatInputCommandInteraction<CacheType>) {
   }
   const reason = interaction.options.getString('motivo', true);
   const time = interaction.options.getInteger('histórico', true);
-  const embedImage = 'https://tenor.com/bjPkT.gif';
+  const embedImage =
+    'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXZudnFlZm95cGQwN2RtanJ2MDZ4bmM0Y2s4dzRtc2NpYXV2MHZlaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/52j6m814RlDesZlWNd/giphy.gif';
+  const userAvatar = interaction.user.avatarURL({
+    extension: 'webp',
+    forceStatic: true,
+  });
   const embed = new EmbedBuilder()
-    .setTitle(`${target.username} foi banido(a)!`)
-    .setThumbnail(target.avatarURL())
+    .setTitle(`${user.username} foi banido(a)!`)
+    .setThumbnail(user.avatarURL())
     .setColor('#35c1c8')
     .setFields([
-      { name: '🪪 Usuário', value: `\`${target.username}\`` },
+      { name: '🪪 Usuário', value: `\`${user.username}\`` },
       {
         name: '📜 Motivo',
         value: reason,
@@ -33,15 +38,12 @@ async function ban(interaction: ChatInputCommandInteraction<CacheType>) {
     ])
     .setImage(embedImage)
     .setFooter({
-      iconURL: interaction.user.avatarURL({
-        extension: 'webp',
-        forceStatic: true,
-      })!,
+      iconURL: userAvatar ? userAvatar : undefined,
       text: interaction.user.username,
     });
 
-  await interaction.guild?.members
-    .ban(target, {
+  interaction.guild?.members
+    .ban(user, {
       reason: reason,
       deleteMessageSeconds: time,
     })
@@ -50,7 +52,6 @@ async function ban(interaction: ChatInputCommandInteraction<CacheType>) {
       await interaction.reply(genericErrorMessage);
       console.error(error);
     });
-
   return;
 }
 
