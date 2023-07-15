@@ -62,9 +62,12 @@ const command: SlashCommand = {
         )
         .addIntegerOption((option) =>
           option
-            .setName('histórico')
-            .setDescription('Exclui o histórico de mensagens.')
+            .setName('deletar_mensagens')
+            .setDescription(
+              'O quanto do histórico de mensagem desse usuário deve ser apagado.'
+            )
             .setChoices(
+              { name: 'Não excluir mensagens', value: 0 },
               { name: 'Última hora', value: 3600 },
               { name: 'Últimas 6 horas', value: 21600 },
               { name: 'Últimas 12 horas', value: 43200 },

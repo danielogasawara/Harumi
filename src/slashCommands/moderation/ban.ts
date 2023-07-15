@@ -18,7 +18,7 @@ async function ban(interaction: ChatInputCommandInteraction<CacheType>) {
     return;
   }
   const reason = interaction.options.getString('motivo', true);
-  const time = interaction.options.getInteger('histórico', true);
+  const time = interaction.options.getInteger('deletar_mensagens', true);
   const embedImage =
     'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXZudnFlZm95cGQwN2RtanJ2MDZ4bmM0Y2s4dzRtc2NpYXV2MHZlaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/52j6m814RlDesZlWNd/giphy.gif';
   const userAvatar = interaction.user.avatarURL({
