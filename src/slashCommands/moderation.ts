@@ -1,7 +1,12 @@
-import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { PermissionFlagsBits, SlashCommandBuilder, User } from 'discord.js';
 import { SlashCommand } from '../types';
 import { genericErrorMessage } from '../utils/errors';
-import { ban, clear, kick } from './moderation/index';
+import { ban, clear, kick, unban } from './moderation/index';
+
+interface IChoice {
+  name: string;
+  value: string | number;
+}
 
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -69,19 +74,67 @@ const command: SlashCommand = {
             )
             .setRequired(true)
         )
+    )
+    .addSubcommand((subcommand) =>
+      subcommand
+        .setName('desbanir')
+        .setDescription('Remove o banimento de um usuário.')
+        .addStringOption((option) =>
+          option
+            .setName('usuário')
+            .setDescription('Usuário que deseja desbanir.')
+            .setAutocomplete(true)
+            .setRequired(true)
+        )
+        .addStringOption((option) =>
+          option
+            .setName('motivo')
+            .setDescription('Motivo por trás do desbanimento.')
+            .setRequired(true)
+        )
     ),
   autocomplete: async (interaction) => {
     const focusedValue = interaction.options.getFocused();
-    const choices = [
-      'Conta suspeita ou de spam',
-      'Conta comprometida ou hackeada',
-      'Quebrando regras do servidor',
-    ];
+    const subcommand = interaction.options.getSubcommand(true);
+    let choices: Array<IChoice> = [];
+
+    switch (subcommand) {
+      case 'banir':
+        choices = [
+          {
+            name: 'Conta suspeita ou de spam',
+            value: 'Conta suspeita ou de spam',
+          },
+          {
+            name: 'Conta comprometida ou hackeada',
+            value: 'Conta comprometida ou hackeada',
+          },
+          {
+            name: 'Quebrando regras do servidor',
+            value: 'Quebrando regras do servidor',
+          },
+        ];
+        break;
+      case 'desbanir':
+        const bannedList = await interaction.guild?.bans.fetch();
+        if (!bannedList || bannedList?.size === 0) {
+          break;
+        }
+        const bannedUsers = bannedList.map((item) => item.user);
+        choices = bannedUsers.map((user) => ({
+          name: user.username,
+          value: user.id,
+        }));
+        break;
+      default:
+        break;
+    }
+
     const filtered = choices.filter((choice) =>
-      choice.startsWith(focusedValue)
+      choice.name.startsWith(focusedValue)
     );
     await interaction.respond(
-      filtered.map((choice) => ({ name: choice, value: choice }))
+      filtered.map((choice) => ({ name: choice.name, value: choice.value }))
     );
   },
   execute: async (interaction) => {
@@ -95,6 +148,9 @@ const command: SlashCommand = {
         break;
       case 'banir':
         await ban(interaction);
+        break;
+      case 'desbanir':
+        await unban(interaction);
         break;
       default:
         await interaction.reply({ content: genericErrorMessage });
