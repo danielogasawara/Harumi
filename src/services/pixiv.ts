@@ -1,7 +1,6 @@
 import { Artwork, Illust, Pixiv } from '@ibaraki-douji/pixivts';
 import { randomInt } from 'node:crypto';
 import { color } from '../functions';
-import { AttachmentBuilder } from 'discord.js';
 
 const pixiv = new Pixiv();
 
@@ -14,11 +13,11 @@ interface ISearchResult {
 }
 
 if (pixivCookie && pixivUserAgent) {
-  console.log(color('text', `🖼️ Pixiv 18+ liberado.`));
+  console.log(color('text', `🖼️  Pixiv 18+ liberado.`));
   pixiv.staticLogin(pixivCookie, pixivUserAgent);
 } else {
   console.log(
-    color('text', `🖼️ Pixiv os cookies ou o user-agent não foram encontrados.`)
+    color('text', `🖼️  Pixiv os cookies ou o user-agent não foram encontrados.`)
   );
 }
 

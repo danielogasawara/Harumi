@@ -4,7 +4,7 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import { SlashCommand } from '../types';
-import pixiv, { getArtwork, pixivLogo, search } from '../utils/pixiv';
+import pixiv, { getArtwork, pixivLogo, search } from '../services/pixiv';
 
 interface PixivEmbed {
   author: string;
