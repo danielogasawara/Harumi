@@ -16,7 +16,7 @@ const command: SlashCommand = {
         .setName('pesquisar')
         .setDescription('Digite o que deseja pesquisar no pixiv.')
         .setMinLength(2)
-        .setMaxLength(60)
+        .setMaxLength(80)
         .setAutocomplete(true)
         .setRequired(true)
     ),
