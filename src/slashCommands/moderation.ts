@@ -1,12 +1,7 @@
 import { PermissionFlagsBits, SlashCommandBuilder, User } from 'discord.js';
-import { SlashCommand } from '../types';
+import { IAutocompleteChoice, SlashCommand } from '../types';
 import { genericErrorMessage } from '../utils/errors';
 import { ban, clear, kick, unban } from './moderation/index';
-
-interface IChoice {
-  name: string;
-  value: string | number;
-}
 
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -99,7 +94,7 @@ const command: SlashCommand = {
   autocomplete: async (interaction) => {
     const focusedValue = interaction.options.getFocused();
     const subcommand = interaction.options.getSubcommand(true);
-    let choices: Array<IChoice> = [];
+    let choices: Array<IAutocompleteChoice> = [];
 
     switch (subcommand) {
       case 'banir':
