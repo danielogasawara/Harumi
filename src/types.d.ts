@@ -25,6 +25,11 @@ export interface Command {
   cooldown?: number;
 }
 
+export interface IAutocompleteChoice {
+  name: string;
+  value: string | number;
+}
+
 interface GuildOptions {
   prefix: string;
 }
