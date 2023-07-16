@@ -25,7 +25,6 @@ const command: SlashCommand = {
     let choices: Array<IAutocompleteChoice> = [];
 
     if (focusedValue.length > 0) {
-      console.log(focusedValue);
       let results = await pixiv.predict(focusedValue);
       choices = results.map((tag) => {
         const autocompleteString = tag.tag_translation
