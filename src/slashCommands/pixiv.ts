@@ -4,72 +4,66 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import { SlashCommand } from '../types';
-import pixiv, { getArtwork, pixivLogo, search } from '../services/pixiv';
-
-interface PixivEmbed {
-  author: string;
-  dimensions: string;
-}
+import pixiv, { pixivLogo } from '../services/pixiv';
+import { genericErrorMessage } from '../utils/errors';
 
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName('pixiv')
     .setDescription('Envia uma imagem do pixiv.')
-    .addStringOption((option) => {
-      return option
+    .addStringOption((option) =>
+      option
         .setName('pesquisar')
         .setDescription('Digite o que deseja pesquisar no pixiv.')
-        .setRequired(true);
-    }),
+        .setMinLength(2)
+        .setMaxLength(60)
+        .setRequired(true)
+    ),
   execute: async (interaction) => {
     try {
       await interaction.deferReply();
 
-      const input = interaction.options.getString('pesquisar');
-      const searchResult = input ? await search(input, 'safe') : false;
-      const artwork = searchResult ? await getArtwork(searchResult) : false;
-      const imageOfArtwork = artwork
-        ? await pixiv.download(new URL(artwork.urls[0].regular))
-        : false;
+      const input = interaction.options.getString('pesquisar', true);
+      const searchResult = await pixiv.search(input, 'safe');
 
-      if (!searchResult || !artwork || !imageOfArtwork) {
-        return interaction.editReply({ content: 'Algo deu errado...' });
+      if (!searchResult) {
+        await interaction.editReply('Nenhuma imagem encontrada.');
+        return;
       }
 
-      const embedPresets: PixivEmbed = {
-        author: artwork.user.name,
-        dimensions: String(`${artwork.height}x${artwork.width}`),
-      };
-
+      const artwork = await pixiv.getArtwork(searchResult);
+      const imageOfArtwork = await pixiv.download(
+        new URL(artwork.urls[0].regular)
+      );
       const image = new AttachmentBuilder(imageOfArtwork, {
         name: 'image.jpg',
         description: undefined,
       });
+      const embed = new EmbedBuilder()
+        .setColor('#35c1c8')
+        .setTitle(artwork.title)
+        .setFields(
+          { name: '🎨 Autor', value: artwork.user.name, inline: true },
+          {
+            name: '📏 Dimensões',
+            value: `${artwork.width}x${artwork.height}`,
+            inline: true,
+          }
+        )
+        .setFooter({
+          text: `https://www.pixiv.net/en/artworks/${artwork.illustID}`,
+          iconURL: pixivLogo,
+        })
+        .setImage('attachment://image.jpg');
 
-      interaction.editReply({
-        embeds: [
-          new EmbedBuilder()
-            .setColor('#35c1c8')
-            .setTitle(artwork.title)
-            .addFields(
-              { name: '🎨 Autor', value: embedPresets.author, inline: true },
-              {
-                name: '📏 Dimensões',
-                value: embedPresets.dimensions,
-                inline: true,
-              }
-            )
-            .setFooter({
-              text: `https://www.pixiv.net/en/artworks/${artwork.illustID}`,
-              iconURL: pixivLogo,
-            })
-            .setImage('attachment://image.jpg'),
-        ],
+      await interaction.editReply({
+        embeds: [embed],
         files: [image],
       });
     } catch (error) {
       console.error(error);
-      return interaction.editReply({ content: 'Algo deu errado...' });
+      await interaction.editReply(genericErrorMessage);
+      return;
     }
   },
   cooldown: 10,
