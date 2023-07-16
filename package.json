@@ -1,7 +1,7 @@
 {
   "name": "harumibot",
-  "version": "0.2.1",
-  "description": "",
+  "version": "0.3.0",
+  "description": "Um bot de uso geral para o discord.",
   "main": "index.js",
   "scripts": {
     "build": "npx tsc",
