@@ -3,7 +3,7 @@ import {
   EmbedBuilder,
   SlashCommandBuilder,
 } from 'discord.js';
-import { SlashCommand } from '../types';
+import { IAutocompleteChoice, SlashCommand } from '../types';
 import pixiv, { pixivLogo } from '../services/pixiv';
 import { genericErrorMessage } from '../utils/errors';
 
@@ -17,8 +17,29 @@ const command: SlashCommand = {
         .setDescription('Digite o que deseja pesquisar no pixiv.')
         .setMinLength(2)
         .setMaxLength(60)
+        .setAutocomplete(true)
         .setRequired(true)
     ),
+  autocomplete: async (interaction) => {
+    const focusedValue = interaction.options.getFocused();
+    let choices: Array<IAutocompleteChoice> = [];
+
+    if (focusedValue.length > 0) {
+      console.log(focusedValue);
+      let results = await pixiv.predict(focusedValue);
+      choices = results.map((tag) => {
+        const autocompleteString = tag.tag_translation
+          ? `🇯🇵 ${tag.tag_name} » 🇺🇸 ${tag.tag_translation}`
+          : `🇺🇸 ${tag.tag_name}`;
+        const choice = { name: autocompleteString, value: tag.tag_name };
+
+        return choice;
+      });
+    }
+    await interaction.respond(
+      choices.map((choice) => ({ name: choice.name, value: choice.value }))
+    );
+  },
   execute: async (interaction) => {
     try {
       await interaction.deferReply();
