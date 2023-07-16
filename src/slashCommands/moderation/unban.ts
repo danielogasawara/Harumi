@@ -7,9 +7,9 @@ import { genericErrorMessage } from '../../utils/errors';
 import wait from '../../utils/wait';
 
 async function unban(interaction: ChatInputCommandInteraction<CacheType>) {
-  const targetId = interaction.options.getString('usuário', true);
+  const userId = interaction.options.getString('usuário', true);
   try {
-    const searchResult = await interaction.guild?.bans.fetch(targetId)!;
+    const searchResult = await interaction.guild?.bans.fetch(userId)!;
     const user = searchResult.user;
     const reason = interaction.options.getString('motivo', true);
     const userAvatar = interaction.user.avatarURL({
@@ -34,6 +34,7 @@ async function unban(interaction: ChatInputCommandInteraction<CacheType>) {
         iconURL: userAvatar ? userAvatar : undefined,
         text: interaction.user.username,
       });
+
     interaction.guild?.members
       .unban(user, reason)
       .then(async () => {
@@ -50,7 +51,7 @@ async function unban(interaction: ChatInputCommandInteraction<CacheType>) {
       });
   } catch (error) {
     await interaction.reply({
-      content: `O usuário com id \`${targetId}\` não existe ou não está banido.`,
+      content: `O usuário com id \`${userId}\` não existe ou não está banido.`,
       ephemeral: true,
     });
     await wait(15000);

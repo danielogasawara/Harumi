@@ -8,6 +8,7 @@ import wait from '../../utils/wait';
 
 async function ban(interaction: ChatInputCommandInteraction<CacheType>) {
   const user = interaction.options.getUser('usuário', true);
+
   if (user.id === interaction.user.id) {
     await interaction.reply({
       content: 'Você não pode banir a si mesmo.',
@@ -17,6 +18,7 @@ async function ban(interaction: ChatInputCommandInteraction<CacheType>) {
     await interaction.deleteReply();
     return;
   }
+
   const reason = interaction.options.getString('motivo', true);
   const time = interaction.options.getInteger('deletar_mensagens', true);
   const embedImage =
@@ -47,12 +49,15 @@ async function ban(interaction: ChatInputCommandInteraction<CacheType>) {
       reason: reason,
       deleteMessageSeconds: time,
     })
-    .then(async () => await interaction.reply({ embeds: [embed] }))
+    .then(async () => {
+      await interaction.reply({ embeds: [embed] });
+      return;
+    })
     .catch(async (error) => {
       await interaction.reply(genericErrorMessage);
       console.error(error);
+      return;
     });
-  return;
 }
 
 export default ban;

@@ -5,38 +5,39 @@ import {
   ColorResolvable,
 } from 'discord.js';
 import { SlashCommand } from '../types';
+import { genericErrorMessage } from '../utils/errors';
 
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName('embed')
     .setDescription('Cria um novo embed.')
-    .addStringOption((option) => {
-      return option
+    .addStringOption((option) =>
+      option
         .setName('título')
         .setDescription('Título do embed')
-        .setRequired(true);
-    })
-    .addStringOption((option) => {
-      return option
+        .setRequired(true)
+    )
+    .addStringOption((option) =>
+      option
         .setName('descrição')
         .setDescription('Descrição do embed.')
-        .setRequired(true);
-    })
-    .addChannelOption((option) => {
-      return option
+        .setRequired(true)
+    )
+    .addChannelOption((option) =>
+      option
         .setName('canal')
         .setDescription('Canal de texto que o embed será enviado.')
-        .setRequired(true);
-    })
-    .addStringOption((option) => {
-      return option
+        .setRequired(true)
+    )
+    .addStringOption((option) =>
+      option
         .setName('cor')
         .setDescription(
           'Selecione uma opção ou digite uma cor em hex, por exemplo: #000000'
         )
         .setRequired(true)
-        .setAutocomplete(true);
-    }),
+        .setAutocomplete(true)
+    ),
   autocomplete: async (interaction) => {
     try {
       const focusedValue = interaction.options.getFocused();
@@ -74,7 +75,7 @@ const command: SlashCommand = {
       }
       await interaction.respond(filtered);
     } catch (error) {
-      console.log(`Error: ${error.message}`);
+      console.error(`Error: ${error.message}`);
     }
   },
   execute: async (interaction) => {
@@ -82,7 +83,7 @@ const command: SlashCommand = {
       await interaction.deferReply({ ephemeral: true });
       const options: { [key: string]: string | number | boolean } = {};
       if (!interaction.options)
-        return interaction.editReply({ content: 'Algo deu errado...' });
+        return interaction.editReply(genericErrorMessage);
       for (let i = 0; i < interaction.options.data.length; i++) {
         const element = interaction.options.data[i];
         if (element.name && element.value)
@@ -110,7 +111,7 @@ const command: SlashCommand = {
         content: 'Embed enviado com sucesso.',
       });
     } catch (error) {
-      interaction.editReply({ content: 'Algo deu errado...' });
+      interaction.editReply(genericErrorMessage);
     }
   },
   cooldown: 10,

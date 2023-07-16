@@ -32,6 +32,7 @@ async function clear(interaction: ChatInputCommandInteraction<CacheType>) {
           });
           await wait(10000);
           await interaction.deleteReply();
+          return;
         } else {
           await interaction.reply({
             content: `${messages.size} mensagem(ns) apagada(s) com sucesso!`,
@@ -39,15 +40,16 @@ async function clear(interaction: ChatInputCommandInteraction<CacheType>) {
           });
           await wait(10000);
           await interaction.deleteReply();
+          return;
         }
       })
-      .catch(async (reason) => {
+      .catch(async (error) => {
         await interaction.reply({
           content: genericErrorMessage,
         });
-        console.error(reason);
+        console.error(error);
+        return;
       });
-    return;
   }
 }
 
