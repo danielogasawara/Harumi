@@ -5,7 +5,7 @@
 
 <div align='center'>
   <img src='https://img.shields.io/github/license/danielogasawara/harumi?&color=0078ac&label=Licen%C3%A7a' alt='Licença GPL v3' />
-  <img src='https://img.shields.io/github/package-json/v/danielogasawara/harumi/master?&color=0078ac&label=Vers%C3%A3o' alt='Bot versão 0.1.1' />
+  <img src='https://img.shields.io/github/package-json/v/danielogasawara/harumi/master?&color=0078ac&label=Vers%C3%A3o' />
   <img src='https://img.shields.io/github/commit-activity/m/danielogasawara/harumi?label=Commits&color=0078ac' />
   <img src='https://img.shields.io/npm/v/discord.js?label=discord.js&color=0078ac' />
 </div>
