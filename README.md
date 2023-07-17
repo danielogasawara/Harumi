@@ -3,9 +3,13 @@
 </div>
 <h1 align='center'>Harumi</h1>
 
-![Licença GPL v3](https://img.shields.io/github/license/danielogasawara/harumi?&color=0078ac&label=Licen%C3%A7a)
-![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/danielogasawara/harumi/master?&color=0078ac&label=Vers%C3%A3o)
-
+<div align='center'>
+  <img src='https://img.shields.io/github/license/danielogasawara/harumi?&color=0078ac&label=Licen%C3%A7a' alt='Licença GPL v3' />
+  <img src='https://img.shields.io/github/package-json/v/danielogasawara/harumi/master?&color=0078ac&label=Vers%C3%A3o' />
+  <img src='https://img.shields.io/github/commit-activity/m/danielogasawara/harumi?label=Commits&color=0078ac' />
+  <img src='https://img.shields.io/npm/v/discord.js?label=discord.js&color=0078ac' />
+</div>
+<br/>
 Harumi é um bot para discord que tem uma personalidade alegre, divertida e amigável. Ela gosta de interagir com os usuários, enviar memes, jogar jogos, tocar música, e dar dicas e conselhos. Ela também é capaz de moderar o chat, gerenciar o servidor, e executar comandos úteis. Harumi é de código aberto, o que significa que você pode ver como ela funciona, contribuir para o seu aprimoramento, ou personalizá-la do seu jeito. Se você quer um bot que te faça sorrir, te ajude nas tarefas, e seja sua companheira no discord, convide a Harumi!
 
 ## 🚧 Desenvolvimento
@@ -14,7 +18,7 @@ Harumi é um bot para discord que tem uma personalidade alegre, divertida e amig
 - [ ] 🎭 Enviar memes
 - [ ] 🎵 Tocar músicas
 - [ ] 🍙 Quiz de anime
-- [ ] 🛠️ Ferramentas de moderação
+- [x] 🛠️ Ferramentas de moderação
 - [ ] 🤖 Integração com IA? (Quem sabe...)
 - [ ] 🍡 Recomendação de anime e mangás
 - [ ] ✨ Muito mais...
@@ -72,17 +76,17 @@ Aguarde o processo terminar e você terá uma estrutura de pastas semelhante a e
 > README.md\
 > tsconfig.json
 
-Renomei o arquivo `.env.example` para `.env` e substitua os valores das chaves com as informações do seu bot, por exemplo:
+Duplique o arquivo `.env.example` e renomei a cópia para `.env`, agora substitua os valores das chaves com as informações do seu bot, segue um exemplo abaixo:
 
-**Obrigatórios**
+**Campos obrigatórios**
 
 ```javascript
-TOKEN= // O token do bot vai aqui.
+BOT_TOKEN= // O token do bot vai aqui.
 CLIENT_ID= // O Client ID do bot vai aqui.
 PREFIX= // Prefixo usado para comandos sem /.
 ```
 
-**Opcionais**
+**Campos opcionais**
 
 ```javascript
 PIXIV_COOKIE= // Seu cookie do pixiv.

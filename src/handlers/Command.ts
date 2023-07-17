@@ -26,7 +26,7 @@ module.exports = (client: Client) => {
     client.commands.set(command.name, command);
   });
 
-  const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
+  const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);
 
   rest
     .put(Routes.applicationCommands(process.env.CLIENT_ID), {
@@ -38,18 +38,18 @@ module.exports = (client: Client) => {
           'text',
           `🔥 Carregado com sucesso ${color(
             'variable',
-            data.length
-          )} comando(s) slash`
-        )
+            data.length,
+          )} comando(s) slash`,
+        ),
       );
       console.log(
         color(
           'text',
           `🔥 Carregado com sucesso ${color(
             'variable',
-            commands.length
-          )} comando(s)`
-        )
+            commands.length,
+          )} comando(s)`,
+        ),
       );
     })
     .catch((e) => {

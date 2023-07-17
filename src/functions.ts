@@ -27,7 +27,7 @@ export const color = (color: colorType, message: any) => {
 
 export const checkPermissions = (
   member: GuildMember,
-  permissions: Array<PermissionResolvable>
+  permissions: Array<PermissionResolvable>,
 ) => {
   let neededPermissions: PermissionResolvable[] = [];
   permissions.forEach((permission) => {
@@ -47,15 +47,15 @@ export const checkPermissions = (
 export const sendTimedMessage = (
   message: string,
   channel: TextChannel,
-  duration: number
+  duration: number,
 ) => {
   channel
     .send(message)
     .then((m) =>
       setTimeout(
         async () => (await channel.messages.fetch(m)).delete(),
-        duration
-      )
+        duration,
+      ),
     );
   return;
 };
@@ -71,7 +71,7 @@ export const getGuildOption = async (guild: Guild, option: GuildOption) => {
 export const setGuildOption = async (
   guild: Guild,
   option: GuildOption,
-  value: any
+  value: any,
 ) => {
   if (mongoose.connection.readyState === 0)
     throw new Error('Banco de dados não conectado.');
@@ -79,4 +79,14 @@ export const setGuildOption = async (
   if (!foundGuild) return null;
   foundGuild.options[option] = value;
   foundGuild.save();
+};
+
+export const deleteGuildFromDatabase = async (value: string) => {
+  if (mongoose.connection.readyState === 0)
+    throw new Error('Banco de dados não conectado.');
+  let foundGuild = await GuildDB.findOne({
+    guildID: value,
+  });
+  if (!foundGuild) return null;
+  foundGuild.deleteOne();
 };

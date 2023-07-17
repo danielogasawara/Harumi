@@ -25,6 +25,11 @@ export interface Command {
   cooldown?: number;
 }
 
+export interface IAutocompleteChoice {
+  name: string;
+  value: string | number;
+}
+
 interface GuildOptions {
   prefix: string;
 }
@@ -45,8 +50,10 @@ export interface BotEvent {
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
-      DISCORD_TOKEN: string;
+      BOT_TOKEN: string;
       CLIENT_ID: string;
+      PIXIV_COOKIE: string;
+      PIXIV_USER_AGENT: string;
       PREFIX: string;
       MONGO_URI: string;
       MONGO_DATABASE_NAME: string;
