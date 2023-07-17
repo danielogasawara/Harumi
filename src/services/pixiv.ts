@@ -10,7 +10,10 @@ if (pixivCookie && pixivUserAgent) {
   pixiv.staticLogin(pixivCookie, pixivUserAgent);
 } else {
   console.log(
-    color('text', `🖼️  Pixiv os cookies ou o user-agent não foram encontrados.`)
+    color(
+      'text',
+      `🖼️  Pixiv os cookies ou o user-agent não foram encontrados.`,
+    ),
   );
 }
 

@@ -16,8 +16,8 @@ module.exports = (client: Client) => {
     console.log(
       color(
         'text',
-        `🌠 Evento carregado com sucesso ${color('variable', event.name)}`
-      )
+        `🌠 Evento carregado com sucesso ${color('variable', event.name)}`,
+      ),
     );
   });
 };

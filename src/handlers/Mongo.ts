@@ -7,24 +7,24 @@ module.exports = () => {
     return console.log(
       color(
         'text',
-        `🍃 Mongo URI não encontrada, ${color('error', 'ignorando.')}`
-      )
+        `🍃 Mongo URI não encontrada, ${color('error', 'ignorando.')}`,
+      ),
     );
   mongoose
     .connect(
-      `${MONGO_URI}/${process.env.MONGO_DATABASE_NAME}?retryWrites=true&w=majority`
+      `${MONGO_URI}/${process.env.MONGO_DATABASE_NAME}?retryWrites=true&w=majority`,
     )
     .then(() =>
       console.log(
         color(
           'text',
-          `🍃 MongoDB a conexão foi ${color('variable', 'estabelecida.')}`
-        )
-      )
+          `🍃 MongoDB a conexão foi ${color('variable', 'estabelecida.')}`,
+        ),
+      ),
     )
     .catch(() =>
       console.log(
-        color('text', `🍃 MongoDB a conexão ${color('error', 'falhou.')}`)
-      )
+        color('text', `🍃 MongoDB a conexão ${color('error', 'falhou.')}`),
+      ),
     );
 };
