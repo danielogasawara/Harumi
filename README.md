@@ -27,93 +27,30 @@ Harumi é um bot para discord que tem uma personalidade alegre, divertida e amig
 
 Em breve...
 
-## 💡Instalação
+## 📜 Comandos
 
-Com os passos abaixo você poderá criar o seu próprio bot baseado no nosso código-fonte.
+### ( / ) Slash
 
-### Requisitos
+**Administrativos**
 
-- (Necessário) [Node.js](https://nodejs.org/en) - Para rodar o código JS na sua máquina.
-- (Necessário) [Git](https://git-scm.com/) - Ferramenta para controle de versão.
-- (Opcional) [VS Code](https://code.visualstudio.com/) - Editor de código.
+- `/moderação limpar` - Limpa a quantidade de mensagens que você determinar;
+- `/moderação expulsar` - Expulsa um usuário;
+- `/moderação banir` - Bane um usuário;
+- `/moderação desbanir` - Retira o banimento de um usuário.
 
-> O uso do Visual Studio Code (VS Code) é opcional, mas altamente recomendado para melhor leitura e edição do código.
+**Utilidade**
 
-### Instalação e configuração
+- `/embed` - Envia um embed personalizado para um canal;
+- `/ping` - Verifica a latência do bot;
+- `/pixiv` - Pesquisa uma imagem do pixiv (somente imagens marcadas como "safe");
+- `/pixiv18` - Pesquisa uma imagem +18 do pixiv (somente pode ser usada em canais marcados como nsfw).
+  
+### ( !ha ) Normais
 
-Após fazer a instalação dos programas necessários, escolha uma pasta em seu computador para clonar o repositório.
+- `!ha mudarprefixo` - Muda o prefixo do bot;
+- `!ha ola` - Te comprimenta.
 
-> Exemplo: C:\Users\SEU_USUÁRIO\Documents\Bot
-
-Em seguida abra o seu terminal na pasta escolhida:
-
-```shell
-cd CAMINHO_ATÉ_A_PASTA
-```
-
-Logo após digite o seguinte comando:
-
-```shell
-git clone https://github.com/danielogasawara/Harumi.git
-```
-
-Agora entre no diretório com terminal e digite:
-
-```shell
-npm install
-```
-
-Aguarde o processo terminar e você terá uma estrutura de pastas semelhante a esta:
-
-> node_modules\
-> src\
-> .env.example\
-> .gitignore\
-> .prettierrc\
-> LICENSE\
-> package-lock.json\
-> package.json\
-> README.md\
-> tsconfig.json
-
-Duplique o arquivo `.env.example` e renomei a cópia para `.env`, agora substitua os valores das chaves com as informações do seu bot, segue um exemplo abaixo:
-
-**Campos obrigatórios**
-
-```javascript
-BOT_TOKEN= // O token do bot vai aqui.
-CLIENT_ID= // O Client ID do bot vai aqui.
-PREFIX= // Prefixo usado para comandos sem /.
-```
-
-**Campos opcionais**
-
-```javascript
-PIXIV_COOKIE= // Seu cookie do pixiv.
-PIXIV_USER_AGENT= // O mesmo user-agent do cookie.
-MONGO_URI= // URL de conexão com o MongoDB.
-MONGO_DATABASE_NAME= // Nome da Base de dados.
-```
-
-> Mais detalhes sobre como encontrar o cookie do pixiv e o user-agente em [@ibaraki-douji/pixivts](https://www.npmjs.com/package/@ibaraki-douji/pixivts#login-with-cookies-recommended).
-
-### Execução
-
-Após todo o processo de instalação e configuração agora basta executar o comando no terminal:
-
-```shell
-npm run build
-```
-
-E depois do comando terminar de compilar você executa este comando:
-
-```shell
-npm run start
-```
-
-Se tudo ocorreu bem seu bot estará online e você já poderá interagir com ele.
-
-## 🔖 Créditos
+## ⭐ Créditos
 
 Este bot utiliza pacotes e códigos disponibilizados gratuitamente pelos usuários abaixo:
 
