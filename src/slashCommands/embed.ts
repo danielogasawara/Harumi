@@ -11,32 +11,33 @@ const command: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName('embed')
     .setDescription('Cria um novo embed.')
+    .setDMPermission(false)
     .addStringOption((option) =>
       option
         .setName('título')
         .setDescription('Título do embed')
-        .setRequired(true),
+        .setRequired(true)
     )
     .addStringOption((option) =>
       option
         .setName('descrição')
         .setDescription('Descrição do embed.')
-        .setRequired(true),
+        .setRequired(true)
     )
     .addChannelOption((option) =>
       option
         .setName('canal')
         .setDescription('Canal de texto que o embed será enviado.')
-        .setRequired(true),
+        .setRequired(true)
     )
     .addStringOption((option) =>
       option
         .setName('cor')
         .setDescription(
-          'Selecione uma opção ou digite uma cor em hex, por exemplo: #000000',
+          'Selecione uma opção ou digite uma cor em hex, por exemplo: #000000'
         )
         .setRequired(true)
-        .setAutocomplete(true),
+        .setAutocomplete(true)
     ),
   autocomplete: async (interaction) => {
     try {
@@ -104,7 +105,7 @@ const command: SlashCommand = {
           iconURL: interaction.client.user?.avatarURL() || undefined,
         });
       let selectedTextChannel = interaction.channel?.client.channels.cache.get(
-        options.channel.toString(),
+        options.channel.toString()
       ) as TextChannel;
       selectedTextChannel.send({ embeds: [embed] });
       return interaction.editReply({

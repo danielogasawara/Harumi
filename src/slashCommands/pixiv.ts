@@ -11,6 +11,7 @@ const command: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName('pixiv')
     .setDescription('Envia uma imagem do pixiv.')
+    .setDMPermission(false)
     .addStringOption((option) =>
       option
         .setName('pesquisar')
@@ -18,7 +19,7 @@ const command: SlashCommand = {
         .setMinLength(2)
         .setMaxLength(80)
         .setAutocomplete(true)
-        .setRequired(true),
+        .setRequired(true)
     ),
   autocomplete: async (interaction) => {
     const focusedValue = interaction.options.getFocused();
@@ -36,7 +37,7 @@ const command: SlashCommand = {
       });
     }
     await interaction.respond(
-      choices.map((choice) => ({ name: choice.name, value: choice.value })),
+      choices.map((choice) => ({ name: choice.name, value: choice.value }))
     );
   },
   execute: async (interaction) => {
@@ -53,7 +54,7 @@ const command: SlashCommand = {
 
       const artwork = await pixiv.getArtwork(searchResult);
       const imageOfArtwork = await pixiv.download(
-        new URL(artwork.urls[0].regular),
+        new URL(artwork.urls[0].regular)
       );
       const image = new AttachmentBuilder(imageOfArtwork, {
         name: 'image.jpg',
@@ -68,7 +69,7 @@ const command: SlashCommand = {
             name: '📏 Dimensões',
             value: `${artwork.width}x${artwork.height}`,
             inline: true,
-          },
+          }
         )
         .setFooter({
           text: `https://www.pixiv.net/en/artworks/${artwork.illustID}`,
