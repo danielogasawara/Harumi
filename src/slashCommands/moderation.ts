@@ -152,7 +152,7 @@ const command: SlashCommand = {
         await unban(interaction);
         break;
       default:
-        await interaction.reply({ content: genericErrorMessage });
+        await interaction.reply(genericErrorMessage.reply);
         break;
     }
   },

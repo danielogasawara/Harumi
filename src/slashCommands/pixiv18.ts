@@ -83,8 +83,11 @@ const command: SlashCommand = {
         files: [image],
       });
     } catch (error) {
-      console.error(error);
-      await interaction.editReply(genericErrorMessage);
+      await interaction.editReply(genericErrorMessage.reply);
+      if (error instanceof Error) {
+        console.error(`Erro: ${error.message}`);
+      }
+      console.error(genericErrorMessage.unknown, error);
       return;
     }
   },
