@@ -11,6 +11,7 @@ const command: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName('embed')
     .setDescription('Cria um novo embed.')
+    .setDMPermission(false)
     .addStringOption((option) =>
       option
         .setName('título')
@@ -75,7 +76,10 @@ const command: SlashCommand = {
       }
       await interaction.respond(filtered);
     } catch (error) {
-      console.error(`Error: ${error.message}`);
+      if (error instanceof Error) {
+        console.error(`Erro: ${error.message}`);
+      }
+      console.error(genericErrorMessage.unknown, error);
     }
   },
   execute: async (interaction) => {
@@ -83,7 +87,7 @@ const command: SlashCommand = {
       await interaction.deferReply({ ephemeral: true });
       const options: { [key: string]: string | number | boolean } = {};
       if (!interaction.options)
-        return interaction.editReply(genericErrorMessage);
+        return interaction.editReply(genericErrorMessage.reply);
       for (let i = 0; i < interaction.options.data.length; i++) {
         const element = interaction.options.data[i];
         if (element.name && element.value)
@@ -111,7 +115,7 @@ const command: SlashCommand = {
         content: 'Embed enviado com sucesso.',
       });
     } catch (error) {
-      interaction.editReply(genericErrorMessage);
+      interaction.editReply(genericErrorMessage.reply);
     }
   },
   cooldown: 10,

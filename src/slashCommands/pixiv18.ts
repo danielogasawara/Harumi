@@ -11,6 +11,7 @@ const command: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName('pixiv18')
     .setDescription('Envia uma imagem 18+ do pixiv.')
+    .setDMPermission(false)
     .addStringOption((option) =>
       option
         .setName('pesquisar')
@@ -82,8 +83,11 @@ const command: SlashCommand = {
         files: [image],
       });
     } catch (error) {
-      console.error(error);
-      await interaction.editReply(genericErrorMessage);
+      await interaction.editReply(genericErrorMessage.reply);
+      if (error instanceof Error) {
+        console.error(`Erro: ${error.message}`);
+      }
+      console.error(genericErrorMessage.unknown, error);
       return;
     }
   },

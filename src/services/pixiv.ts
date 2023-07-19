@@ -1,7 +1,7 @@
 import { color } from '../functions';
-import PixivAdapted from '../extensions/PixivAdapted';
+import ExtendedPixiv from '../extensions/ExtendedPixiv';
 
-const pixiv = new PixivAdapted();
+const pixiv = new ExtendedPixiv();
 const pixivCookie = process.env.PIXIV_COOKIE;
 const pixivUserAgent = process.env.PIXIV_USER_AGENT;
 

@@ -7,34 +7,35 @@ const command: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName('moderação')
     .setDescription('Comandos para moderação do servidor.')
+    .setDMPermission(false)
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addSubcommand((subcommand) =>
       subcommand
         .setName('limpar')
         .setDescription('Apaga as mensagens do chat.')
-        .addNumberOption((option) => {
-          return option
+        .addNumberOption((option) =>
+          option
             .setName('quantidade')
             .setDescription('Quantidade de mensagens para serem apagadas.')
             .setMinValue(1)
-            .setRequired(true);
-        })
+            .setRequired(true)
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
         .setName('expulsar')
         .setDescription('Expulsa um usuário do seu servidor.')
-        .addUserOption((option) => {
-          return option
+        .addUserOption((option) =>
+          option
             .setName('usuário')
             .setDescription('Usuário que deseja expulsar.')
-            .setRequired(true);
-        })
-        .addStringOption((option) => {
-          return option
+            .setRequired(true)
+        )
+        .addStringOption((option) =>
+          option
             .setName('motivo')
-            .setDescription('Motivo por trás da expulsão.');
-        })
+            .setDescription('Motivo por trás da expulsão.')
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -151,7 +152,7 @@ const command: SlashCommand = {
         await unban(interaction);
         break;
       default:
-        await interaction.reply({ content: genericErrorMessage });
+        await interaction.reply(genericErrorMessage.reply);
         break;
     }
   },

@@ -5,7 +5,7 @@ interface ISearchResult {
   artworks: Artwork[];
   quantity: number;
 }
-class PixivAdapted extends Pixiv {
+class ExtendedPixiv extends Pixiv {
   public async search(
     input: string,
     mode: 'r18' | 'safe'
@@ -37,4 +37,4 @@ class PixivAdapted extends Pixiv {
   }
 }
 
-export default PixivAdapted;
+export default ExtendedPixiv;

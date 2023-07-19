@@ -4,7 +4,8 @@ import { SlashCommand } from '../types';
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName('ping')
-    .setDescription('Mostra a latência do bot.'),
+    .setDescription('Mostra a latência do bot.')
+    .setDMPermission(false),
   execute: async (interaction) => {
     const embed = new EmbedBuilder()
       .setAuthor({ name: 'Harumi' })

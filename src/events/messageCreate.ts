@@ -26,18 +26,18 @@ const event: BotEvent = {
 
     if (!command) {
       let commandFromAlias = message.client.commands.find((command) =>
-        command.aliases.includes(args[0])
+        command.aliases.includes(args[0]),
       );
       if (commandFromAlias) command = commandFromAlias;
       else return;
     }
 
     let cooldown = message.client.cooldowns.get(
-      `${command.name}-${message.member.user.username}`
+      `${command.name}-${message.member.user.username}`,
     );
     let neededPermissions = checkPermissions(
       message.member,
-      command.permissions
+      command.permissions,
     );
     if (neededPermissions !== null)
       return sendTimedMessage(
@@ -46,33 +46,33 @@ const event: BotEvent = {
             \n Permissão necessária: ${neededPermissions.join(', ')}
             `,
         message.channel,
-        5000
+        5000,
       );
 
     if (command.cooldown && cooldown) {
       if (Date.now() < cooldown) {
         sendTimedMessage(
           `Você precisa esperar ${Math.floor(
-            Math.abs(Date.now() - cooldown) / 1000
+            Math.abs(Date.now() - cooldown) / 1000,
           )} segundo(s) para usar esse comando novamente.`,
           message.channel,
-          5000
+          5000,
         );
         return;
       }
       message.client.cooldowns.set(
         `${command.name}-${message.member.user.username}`,
-        Date.now() + command.cooldown * 1000
+        Date.now() + command.cooldown * 1000,
       );
       setTimeout(() => {
         message.client.cooldowns.delete(
-          `${command?.name}-${message.member?.user.username}`
+          `${command?.name}-${message.member?.user.username}`,
         );
       }, command.cooldown * 1000);
     } else if (command.cooldown && !cooldown) {
       message.client.cooldowns.set(
         `${command.name}-${message.member.user.username}`,
-        Date.now() + command.cooldown * 1000
+        Date.now() + command.cooldown * 1000,
       );
     }
 
