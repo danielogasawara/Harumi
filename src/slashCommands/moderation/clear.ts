@@ -45,9 +45,12 @@ async function clear(interaction: ChatInputCommandInteraction<CacheType>) {
       })
       .catch(async (error) => {
         await interaction.reply({
-          content: genericErrorMessage,
+          content: genericErrorMessage.reply,
         });
-        console.error(error);
+        if (error instanceof Error) {
+          console.error(`Erro: ${error.message}`);
+        }
+        console.error(genericErrorMessage.unknown, error);
         return;
       });
   }
