@@ -79,11 +79,7 @@ const command: SlashCommand = {
         .setTitle(artwork.title)
         .setFields(
           { name: '🎨 Autor', value: artwork.user.name, inline: true },
-          {
-            name: '📏 Dimensões',
-            value: `${artwork.width}x${artwork.height}`,
-            inline: true,
-          }
+          { name: '🤖 I.A', value: artwork.AI ? 'Sim' : 'Não', inline: true }
         )
         .setFooter({
           text: `https://www.pixiv.net/en/artworks/${artwork.illustID}`,
