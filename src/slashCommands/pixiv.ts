@@ -4,8 +4,9 @@ import {
   SlashCommandBuilder,
 } from 'discord.js';
 import { IAutocompleteChoice, SlashCommand } from '../types';
-import pixiv, { pixivLogo } from '../services/pixiv';
+import PixivInstance from '../instances/PixivInstance';
 import { genericErrorMessage } from '../utils/errors';
+import { randomInt } from 'crypto';
 
 const command: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -20,13 +21,21 @@ const command: SlashCommand = {
         .setMaxLength(80)
         .setAutocomplete(true)
         .setRequired(true)
+    )
+    .addBooleanOption((option) =>
+      option
+        .setName('ia')
+        .setDescription(
+          'Permitir que imagens geradas por I.A apareçam nos resultados.'
+        )
+        .setRequired(true)
     ),
   autocomplete: async (interaction) => {
     const focusedValue = interaction.options.getFocused();
     let choices: Array<IAutocompleteChoice> = [];
 
     if (focusedValue.length > 0) {
-      let results = await pixiv.predict(focusedValue);
+      let results = await PixivInstance.predict(focusedValue);
       choices = results.map((tag) => {
         const autocompleteString = tag.tag_translation
           ? `🇯🇵 ${tag.tag_name} » 🇺🇸 ${tag.tag_translation}`
@@ -45,15 +54,20 @@ const command: SlashCommand = {
       await interaction.deferReply();
 
       const input = interaction.options.getString('pesquisar', true);
-      const searchResult = await pixiv.search(input, 'safe');
+      const aiOption = interaction.options.getBoolean('ia', true);
+      const searchResult = await PixivInstance.getIllustByTag(input, {
+        mode: 'safe',
+        ai: aiOption,
+      });
 
-      if (!searchResult) {
+      if (searchResult.length === 0) {
         await interaction.editReply('Nenhuma imagem encontrada.');
         return;
       }
 
-      const artwork = await pixiv.getArtwork(searchResult);
-      const imageOfArtwork = await pixiv.download(
+      const randomArtwork = searchResult[randomInt(0, searchResult.length + 1)];
+      const artwork = await PixivInstance.getIllustById(randomArtwork.id);
+      const imageOfArtwork = await PixivInstance.download(
         new URL(artwork.urls[0].regular)
       );
       const image = new AttachmentBuilder(imageOfArtwork, {
@@ -73,7 +87,7 @@ const command: SlashCommand = {
         )
         .setFooter({
           text: `https://www.pixiv.net/en/artworks/${artwork.illustID}`,
-          iconURL: pixivLogo,
+          iconURL: 'https://i.imgur.com/qm2lhiu.png',
         })
         .setImage('attachment://image.jpg');
 
