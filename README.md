@@ -44,7 +44,7 @@ Em breve...
 - `/ping` - Verifica a latência do bot;
 - `/pixiv` - Pesquisa uma imagem do pixiv (somente imagens marcadas como "safe");
 - `/pixiv18` - Pesquisa uma imagem +18 do pixiv (somente pode ser usada em canais marcados como nsfw).
-  
+
 ### ( !ha ) Normais
 
 - `!ha mudarprefixo` - Muda o prefixo do bot;
@@ -54,7 +54,7 @@ Em breve...
 
 Este bot utiliza pacotes e códigos disponibilizados gratuitamente pelos usuários abaixo:
 
-[Ibaraki Douji](https://github.com/ibaraki-douji) - Pixiv Downloader (pixivts)
+[@Ibaraki Douji](https://github.com/ibaraki-douji) - Pixiv Downloader (pixivts)
 
-[MericcaN41](https://github.com/MericcaN41) -
+[@MericcaN41](https://github.com/MericcaN41) -
 Discord.js v14 Typescript template
