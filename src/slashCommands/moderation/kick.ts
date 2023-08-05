@@ -54,8 +54,11 @@ async function kick(interaction: ChatInputCommandInteraction<CacheType>) {
       return;
     })
     .catch(async (error) => {
-      await interaction.reply(genericErrorMessage);
-      console.error(error);
+      await interaction.reply(genericErrorMessage.reply);
+      if (error instanceof Error) {
+        console.error(`Erro: ${error.message}`);
+      }
+      console.error(genericErrorMessage.unknown, error);
       return;
     });
 }

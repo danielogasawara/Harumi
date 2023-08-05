@@ -7,34 +7,35 @@ const command: SlashCommand = {
   command: new SlashCommandBuilder()
     .setName('moderação')
     .setDescription('Comandos para moderação do servidor.')
+    .setDMPermission(false)
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addSubcommand((subcommand) =>
       subcommand
         .setName('limpar')
         .setDescription('Apaga as mensagens do chat.')
-        .addNumberOption((option) => {
-          return option
+        .addNumberOption((option) =>
+          option
             .setName('quantidade')
             .setDescription('Quantidade de mensagens para serem apagadas.')
             .setMinValue(1)
-            .setRequired(true);
-        }),
+            .setRequired(true)
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
         .setName('expulsar')
         .setDescription('Expulsa um usuário do seu servidor.')
-        .addUserOption((option) => {
-          return option
+        .addUserOption((option) =>
+          option
             .setName('usuário')
             .setDescription('Usuário que deseja expulsar.')
-            .setRequired(true);
-        })
-        .addStringOption((option) => {
-          return option
+            .setRequired(true)
+        )
+        .addStringOption((option) =>
+          option
             .setName('motivo')
-            .setDescription('Motivo por trás da expulsão.');
-        }),
+            .setDescription('Motivo por trás da expulsão.')
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -44,7 +45,7 @@ const command: SlashCommand = {
           option
             .setName('usuário')
             .setDescription('Usuário que deseja banir.')
-            .setRequired(true),
+            .setRequired(true)
         )
         .addStringOption((option) =>
           option
@@ -53,13 +54,13 @@ const command: SlashCommand = {
             .setAutocomplete(true)
             .setMinLength(4)
             .setMaxLength(512)
-            .setRequired(true),
+            .setRequired(true)
         )
         .addIntegerOption((option) =>
           option
             .setName('deletar_mensagens')
             .setDescription(
-              'O quanto do histórico de mensagem desse usuário deve ser apagado.',
+              'O quanto do histórico de mensagem desse usuário deve ser apagado.'
             )
             .setChoices(
               { name: 'Não excluir mensagens', value: 0 },
@@ -68,10 +69,10 @@ const command: SlashCommand = {
               { name: 'Últimas 12 horas', value: 43200 },
               { name: 'Últimas 24 horas', value: 86400 },
               { name: 'Últimos 3 dias', value: 259200 },
-              { name: 'Últimos 7 dias', value: 604800 },
+              { name: 'Últimos 7 dias', value: 604800 }
             )
-            .setRequired(true),
-        ),
+            .setRequired(true)
+        )
     )
     .addSubcommand((subcommand) =>
       subcommand
@@ -82,14 +83,14 @@ const command: SlashCommand = {
             .setName('usuário')
             .setDescription('Usuário que deseja desbanir.')
             .setAutocomplete(true)
-            .setRequired(true),
+            .setRequired(true)
         )
         .addStringOption((option) =>
           option
             .setName('motivo')
             .setDescription('Motivo por trás do desbanimento.')
-            .setRequired(true),
-        ),
+            .setRequired(true)
+        )
     ),
   autocomplete: async (interaction) => {
     const focusedValue = interaction.options.getFocused();
@@ -129,10 +130,10 @@ const command: SlashCommand = {
     }
 
     const filtered = choices.filter((choice) =>
-      choice.name.startsWith(focusedValue),
+      choice.name.startsWith(focusedValue)
     );
     await interaction.respond(
-      filtered.map((choice) => ({ name: choice.name, value: choice.value })),
+      filtered.map((choice) => ({ name: choice.name, value: choice.value }))
     );
   },
   execute: async (interaction) => {
@@ -151,7 +152,7 @@ const command: SlashCommand = {
         await unban(interaction);
         break;
       default:
-        await interaction.reply({ content: genericErrorMessage });
+        await interaction.reply(genericErrorMessage.reply);
         break;
     }
   },
