@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npx tsc",
     "format": "npx prettier --write ./src/**/*.ts",
-    "start": "node ."
+    "start": "node .",
+    "start:dev": "npm run build && npm run start"
   },
   "keywords": [],
   "author": "Daniel Ogasawara",
