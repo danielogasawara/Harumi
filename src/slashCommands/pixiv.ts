@@ -22,12 +22,13 @@ const command: SlashCommand = {
         .setAutocomplete(true)
         .setRequired(true)
     )
-    .addBooleanOption((option) =>
+    .addIntegerOption((option) =>
       option
         .setName('ia')
         .setDescription(
           'Permitir que imagens geradas por I.A apareçam nos resultados.'
         )
+        .setChoices({ name: 'Sim', value: 1 }, { name: 'Não', value: 0 })
         .setRequired(true)
     ),
   autocomplete: async (interaction) => {
@@ -54,7 +55,7 @@ const command: SlashCommand = {
       await interaction.deferReply();
 
       const input = interaction.options.getString('pesquisar', true);
-      const aiOption = interaction.options.getBoolean('ia', true);
+      const aiOption = Boolean(interaction.options.getInteger('ia', true));
       const searchResult = await PixivInstance.getIllustByTag(input, {
         mode: 'safe',
         ai: aiOption,
