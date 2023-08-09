@@ -1,9 +1,28 @@
-import { Client, GatewayIntentBits, Collection } from 'discord.js';
-const { Guilds, MessageContent, GuildMessages, GuildMembers } =
-  GatewayIntentBits;
+import {
+  Client,
+  Collection,
+  BitFieldResolvable,
+  IntentsBitField,
+  GatewayIntentsString,
+  Partials,
+} from 'discord.js';
+
+const intents = Object.keys(IntentsBitField.Flags) as BitFieldResolvable<
+  GatewayIntentsString,
+  number
+>;
 const client = new Client({
-  intents: [Guilds, MessageContent, GuildMessages, GuildMembers],
+  intents: [intents],
+  partials: [
+    Partials.Channel,
+    Partials.GuildMember,
+    Partials.Message,
+    Partials.Reaction,
+    Partials.ThreadMember,
+    Partials.User,
+  ],
 });
+
 import { Command, SlashCommand } from './types';
 import { config } from 'dotenv';
 import { readdirSync } from 'fs';
