@@ -1,5 +1,6 @@
 import {
   AttachmentBuilder,
+  ChannelType,
   EmbedBuilder,
   SlashCommandBuilder,
 } from 'discord.js';
@@ -30,6 +31,14 @@ const command: SlashCommand = {
         )
         .setChoices({ name: 'Sim', value: 1 }, { name: 'Não', value: 0 })
         .setRequired(true)
+    )
+    .addIntegerOption((option) =>
+      option
+        .setName('nsfw')
+        .setDescription(
+          'Define que apareça apenas imagens 18+. (Apenas pode ser usado em canais NSFW.)'
+        )
+        .setChoices({ name: 'Sim', value: 1 }, { name: 'Não', value: 0 })
     ),
   autocomplete: async (interaction) => {
     const focusedValue = interaction.options.getFocused();
@@ -54,12 +63,31 @@ const command: SlashCommand = {
     try {
       await interaction.deferReply();
 
-      const input = interaction.options.getString('pesquisar', true);
-      const aiOption = Boolean(interaction.options.getInteger('ia', true));
-      const searchResult = await PixivInstance.getIllustByTag(input, {
-        mode: 'safe',
-        ai: aiOption,
-      });
+      const optionsValue = {
+        input: interaction.options.getString('pesquisar', true),
+        ai: Boolean(interaction.options.getInteger('ia', true)),
+        mode: Boolean(interaction.options.getInteger('nsfw')),
+      };
+
+      if (interaction.channel?.type === ChannelType.GuildText) {
+        if (!interaction.channel.nsfw && optionsValue.mode) {
+          await interaction.deleteReply();
+          await interaction.followUp({
+            content:
+              'Você só pode pedir imagens NSFW em canais específicos para isso!',
+            ephemeral: true,
+          });
+          return;
+        }
+      }
+
+      const searchResult = await PixivInstance.getIllustByTag(
+        optionsValue.input,
+        {
+          mode: optionsValue.mode ? 'r18' : 'safe',
+          ai: optionsValue.ai,
+        }
+      );
 
       if (searchResult.length === 0) {
         await interaction.editReply('Nenhuma imagem encontrada.');
