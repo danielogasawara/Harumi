@@ -1,19 +1,19 @@
 {
   "name": "harumibot",
-  "version": "0.3.1",
+  "version": "2.0.0",
   "description": "Um bot de uso geral para o discord.",
   "main": "./build/index.js",
   "scripts": {
     "build": "npx tsc",
     "format": "npx prettier --write ./src/**/*.ts",
-    "start": "node ."
+    "start": "node .",
+    "start:dev": "npm run build && npm run start"
   },
   "keywords": [],
   "author": "Daniel Ogasawara",
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@discordjs/rest": "^1.7.1",
-    "@ibaraki-douji/pixivts": "^2.4.1",
     "chalk": "^4.1.2",
     "discord.js": "^14.11.0",
     "dotenv": "^16.3.1",
