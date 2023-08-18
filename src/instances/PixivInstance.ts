@@ -11,9 +11,9 @@ if (cookies.length > 1000 && userAgent.length > 40) {
 
 PixivInstance.isLogged().then((result) => {
   if (result) {
-    return console.log(color('text', '🖼️ Pixiv +18 liberado!'));
+    return console.log(color('text', '🖼️ Pixiv 18+ liberado!'));
   }
-  return console.log(color('error', '🖼️ Pixiv +18 não está disponível.'));
+  return console.log(color('error', '🖼️ Pixiv 18+ não está disponível.'));
 });
 
 export default PixivInstance;
