@@ -46,15 +46,18 @@ const command: SlashCommand = {
 
     if (focusedValue.length > 0) {
       let results = await PixivInstance.predict(focusedValue);
-      choices = results.map((tag) => {
-        const autocompleteString = tag.tag_translation
-          ? `🇯🇵 ${tag.tag_name} » 🇺🇸 ${tag.tag_translation}`
-          : `🇺🇸 ${tag.tag_name}`;
-        const choice = { name: autocompleteString, value: tag.tag_name };
+      if (results.length > 0) {
+        choices = results.map((tag) => {
+          const autocompleteString = tag.tag_translation
+            ? `🇯🇵 ${tag.tag_name} » 🇺🇸 ${tag.tag_translation}`
+            : `🇺🇸 ${tag.tag_name}`;
+          const choice = { name: autocompleteString, value: tag.tag_name };
 
-        return choice;
-      });
+          return choice;
+        });
+      }
     }
+
     await interaction.respond(
       choices.map((choice) => ({ name: choice.name, value: choice.value }))
     );
