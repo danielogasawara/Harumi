@@ -1,5 +1,6 @@
 import {
   AttachmentBuilder,
+  ChannelType,
   EmbedBuilder,
   SlashCommandBuilder,
 } from 'discord.js';
@@ -22,13 +23,22 @@ const command: SlashCommand = {
         .setAutocomplete(true)
         .setRequired(true)
     )
-    .addBooleanOption((option) =>
+    .addIntegerOption((option) =>
       option
         .setName('ia')
         .setDescription(
           'Permitir que imagens geradas por I.A apareçam nos resultados.'
         )
+        .setChoices({ name: 'Sim', value: 1 }, { name: 'Não', value: 0 })
         .setRequired(true)
+    )
+    .addIntegerOption((option) =>
+      option
+        .setName('nsfw')
+        .setDescription(
+          'Define que apareça apenas imagens 18+. (Apenas pode ser usado em canais NSFW.)'
+        )
+        .setChoices({ name: 'Sim', value: 1 }, { name: 'Não', value: 0 })
     ),
   autocomplete: async (interaction) => {
     const focusedValue = interaction.options.getFocused();
@@ -36,15 +46,18 @@ const command: SlashCommand = {
 
     if (focusedValue.length > 0) {
       let results = await PixivInstance.predict(focusedValue);
-      choices = results.map((tag) => {
-        const autocompleteString = tag.tag_translation
-          ? `🇯🇵 ${tag.tag_name} » 🇺🇸 ${tag.tag_translation}`
-          : `🇺🇸 ${tag.tag_name}`;
-        const choice = { name: autocompleteString, value: tag.tag_name };
+      if (results.length > 0) {
+        choices = results.map((tag) => {
+          const autocompleteString = tag.tag_translation
+            ? `🇯🇵 ${tag.tag_name} » 🇺🇸 ${tag.tag_translation}`
+            : `🇺🇸 ${tag.tag_name}`;
+          const choice = { name: autocompleteString, value: tag.tag_name };
 
-        return choice;
-      });
+          return choice;
+        });
+      }
     }
+
     await interaction.respond(
       choices.map((choice) => ({ name: choice.name, value: choice.value }))
     );
@@ -53,12 +66,31 @@ const command: SlashCommand = {
     try {
       await interaction.deferReply();
 
-      const input = interaction.options.getString('pesquisar', true);
-      const aiOption = interaction.options.getBoolean('ia', true);
-      const searchResult = await PixivInstance.getIllustByTag(input, {
-        mode: 'safe',
-        ai: aiOption,
-      });
+      const optionsValue = {
+        input: interaction.options.getString('pesquisar', true),
+        ai: Boolean(interaction.options.getInteger('ia', true)),
+        mode: Boolean(interaction.options.getInteger('nsfw')),
+      };
+
+      if (interaction.channel?.type === ChannelType.GuildText) {
+        if (!interaction.channel.nsfw && optionsValue.mode) {
+          await interaction.deleteReply();
+          await interaction.followUp({
+            content:
+              'Você só pode pedir imagens NSFW em canais específicos para isso!',
+            ephemeral: true,
+          });
+          return;
+        }
+      }
+
+      const searchResult = await PixivInstance.getIllustByTag(
+        optionsValue.input,
+        {
+          mode: optionsValue.mode ? 'r18' : 'safe',
+          ai: optionsValue.ai,
+        }
+      );
 
       if (searchResult.length === 0) {
         await interaction.editReply('Nenhuma imagem encontrada.');
