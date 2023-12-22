@@ -144,7 +144,7 @@ class Pixiv {
    * @returns {Promise<Response>} Uma requisição utilizando o fetch.
    */
   fetch(url: URL): Promise<Response> {
-    const headers: HeadersInit = [
+    const headers = [
       [
         'User-Agent',
         this.userAgent != '' ? this.userAgent : 'Cloudflare Workers',
