@@ -31,10 +31,15 @@ class Pixiv {
    * @returns {boolean} Um booleano.
    */
   async isLogged(): Promise<boolean> {
-    const imageInfo = await this.getIllustById('66917649');
     if (this.cookies !== '' && this.userAgent !== '') {
-      if (imageInfo.urls[0].mini) {
-        return true;
+      try {
+        const imageInfo = await this.getIllustById('66917649');
+
+        if (imageInfo.urls[0].mini) {
+          return true;
+        }
+      } catch (error) {
+        return false;
       }
     }
 
@@ -119,9 +124,9 @@ class Pixiv {
     const url = new URL(
       `https://www.pixiv.net/rpc/cps.php?keyword=${encodedInput}&lang=en`
     );
-    const res = await this.fetch(url);
+    const res = await fetch(url, {headers: [['Referer', 'https://www.pixiv.net/en/']]});
     const json: SearchPredict = JSON.parse(await res.text());
-
+    
     return json.candidates;
   }
   /**
@@ -153,7 +158,7 @@ class Pixiv {
         'cookie',
         this.cookies != '' && this.userAgent != '' ? this.cookies : '',
       ],
-      ['Referer', 'https://www.pixiv.net/'],
+      ['Referer', 'https://www.pixiv.net/en/'],
     ];
 
     return fetch(url, { headers: headers });
