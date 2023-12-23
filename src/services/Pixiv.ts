@@ -27,7 +27,7 @@ class Pixiv {
     this.userAgent = userAgent;
   }
   /**
-   * Verifica se você está logado.
+   * Verifica se o usuário está logado.
    * @returns {boolean} Um booleano.
    */
   async isLogged(): Promise<boolean> {
@@ -126,7 +126,7 @@ class Pixiv {
     );
     const res = await fetch(url, {headers: [['Referer', 'https://www.pixiv.net/en/']]});
     const json: SearchPredict = JSON.parse(await res.text());
-    
+
     return json.candidates;
   }
   /**
