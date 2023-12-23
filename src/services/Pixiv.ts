@@ -1,3 +1,4 @@
+import { color } from '../functions';
 import {
   Artwork,
   SearchOptions,
@@ -12,11 +13,12 @@ import encodeQueryParameter from '../utils/encodeQueryParameter';
 class Pixiv {
   private cookies: string;
   private userAgent: string;
-  private isValidCredentials: boolean = false;
+  private isLogged: boolean;
 
   constructor() {
     this.cookies = '';
     this.userAgent = '';
+    this.isLogged = false;
   }
   /**
    * Faz login na conta do pixiv.
@@ -26,27 +28,33 @@ class Pixiv {
   login(cookies: string, userAgent: string): void {
     this.cookies = cookies;
     this.userAgent = userAgent;
+    this.verifyCredentials();
   }
   /**
-   * Verifica se o usuário está logado.
+   * Verifica se o Cookie e o User-Agent são válidos.
    * @returns {boolean} Um booleano.
    */
-  async isLogged(): Promise<boolean> {
-    if (this.cookies !== '' && this.userAgent !== '') {
-      try {
-        const imageInfo = await this.getIllustById('66917649');
+  protected async verifyCredentials(): Promise<void> {
+    try {
+      const headers = [
+        ['User-Agent', this.userAgent],
+        ['Cookie', this.cookies],
+      ];
+      const illustNSFW = await fetch(
+        'https://www.pixiv.net/ajax/illust/114377289?lang=en',
+        { headers: headers }
+      );
 
-        if (imageInfo.urls[0].mini) {
-          this.isValidCredentials = true;
-          return true;
-        }
-      } catch (error) {
-        return false;
+      if (illustNSFW.status === 200) {
+        console.log(color('text', '🖼️  Pixiv 18+ liberado!'));
+        this.isLogged = true;
+      } else {
+        console.log(color('error', '🖼️  Pixiv 18+ não disponível.'));
       }
+    } catch (error) {
+      console.log(color('error', '🖼️  Pixiv 18+ não disponível.'));
     }
-
-    return false;
-  };
+  }
   /**
    * Faz uma busca por ilustrações utilizando uma ou mais tags.
    * @param {string} tag Palavras ou nomes que serão usadas na busca.
@@ -126,7 +134,7 @@ class Pixiv {
     const url = new URL(
       `https://www.pixiv.net/rpc/cps.php?keyword=${encodedInput}&lang=en`
     );
-    const res = await fetch(url, {headers: [['Referer', 'https://www.pixiv.net/en/']]});
+    const res = await this.fetch(url);
     const json: SearchPredict = JSON.parse(await res.text());
 
     return json.candidates;
@@ -150,21 +158,14 @@ class Pixiv {
    * @param {URL} url URL para fazer a requisição.
    * @returns {Promise<Response>} Uma requisição utilizando o fetch.
    */
-  fetch(url: URL): Promise<Response> {
+  protected async fetch(url: URL): Promise<Response> {
     const loggedHeaders = [
-      [
-        'User-Agent',
-        this.userAgent != '' ? this.userAgent : 'Cloudflare Workers',
-      ],
-      [
-        'cookie',
-        this.cookies != '' && this.userAgent != '' ? this.cookies : '',
-      ],
+      ['User-Agent', this.userAgent],
+      ['Cookie', this.cookies],
       ['Referer', 'https://www.pixiv.net/en/'],
     ];
-    const guestHeaders = [['Referer', 'https://www.pixiv.net/en/']]
-
-    const headers = this.isValidCredentials ? loggedHeaders : guestHeaders;
+    const guestHeaders = [['Referer', 'https://www.pixiv.net/en/']];
+    const headers = this.isLogged ? loggedHeaders : guestHeaders;
 
     return fetch(url, { headers: headers });
   }
