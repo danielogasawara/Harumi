@@ -42,22 +42,28 @@ const command: SlashCommand = {
     ),
   autocomplete: async (interaction) => {
     const focusedValue = interaction.options.getFocused();
-    let choices: Array<IAutocompleteChoice> = [];
 
     if (focusedValue.length > 0) {
       let results = await PixivInstance.predict(focusedValue);
-      choices = results.map((tag) => {
-        const autocompleteString = tag.tag_translation
-          ? `🇯🇵 ${tag.tag_name} » 🇺🇸 ${tag.tag_translation}`
-          : `🇺🇸 ${tag.tag_name}`;
-        const choice = { name: autocompleteString, value: tag.tag_name };
+      let choices: Array<IAutocompleteChoice> = [];
 
-        return choice;
-      });
+      if (results.length > 0) {
+        choices = results.map((tag) => {
+          const autocompleteString = tag.tag_translation
+            ? `🇯🇵 ${tag.tag_name} » 🇺🇸 ${tag.tag_translation}`
+            : `🇺🇸 ${tag.tag_name}`;
+          const choice = { name: autocompleteString, value: tag.tag_name };
+
+          return choice;
+        });
+      }
+
+      await interaction.respond(
+        choices.map((choice) => ({ name: choice.name, value: choice.value }))
+      );
+    } else {
+      await interaction.respond([]);
     }
-    await interaction.respond(
-      choices.map((choice) => ({ name: choice.name, value: choice.value }))
-    );
   },
   execute: async (interaction) => {
     try {
