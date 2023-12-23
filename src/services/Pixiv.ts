@@ -12,6 +12,7 @@ import encodeQueryParameter from '../utils/encodeQueryParameter';
 class Pixiv {
   private cookies: string;
   private userAgent: string;
+  private isValidCredentials: boolean = false;
 
   constructor() {
     this.cookies = '';
@@ -36,6 +37,7 @@ class Pixiv {
         const imageInfo = await this.getIllustById('66917649');
 
         if (imageInfo.urls[0].mini) {
+          this.isValidCredentials = true;
           return true;
         }
       } catch (error) {
@@ -44,7 +46,7 @@ class Pixiv {
     }
 
     return false;
-  }
+  };
   /**
    * Faz uma busca por ilustrações utilizando uma ou mais tags.
    * @param {string} tag Palavras ou nomes que serão usadas na busca.
@@ -149,7 +151,7 @@ class Pixiv {
    * @returns {Promise<Response>} Uma requisição utilizando o fetch.
    */
   fetch(url: URL): Promise<Response> {
-    const headers = [
+    const loggedHeaders = [
       [
         'User-Agent',
         this.userAgent != '' ? this.userAgent : 'Cloudflare Workers',
@@ -160,6 +162,9 @@ class Pixiv {
       ],
       ['Referer', 'https://www.pixiv.net/en/'],
     ];
+    const guestHeaders = [['Referer', 'https://www.pixiv.net/en/']]
+
+    const headers = this.isValidCredentials ? loggedHeaders : guestHeaders;
 
     return fetch(url, { headers: headers });
   }
