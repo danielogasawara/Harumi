@@ -3,6 +3,7 @@ import {
   TextChannel,
   EmbedBuilder,
   ColorResolvable,
+  ChannelType,
 } from 'discord.js';
 import { SlashCommand } from '../types';
 import { genericErrorMessage } from '../utils/errors';
@@ -28,6 +29,7 @@ const command: SlashCommand = {
       option
         .setName('canal')
         .setDescription('Canal de texto que o embed será enviado.')
+        .addChannelTypes(ChannelType.GuildText)
         .setRequired(true)
     )
     .addStringOption((option) =>
@@ -85,35 +87,22 @@ const command: SlashCommand = {
   execute: async (interaction) => {
     try {
       await interaction.deferReply({ ephemeral: true });
-      const options: { [key: string]: string | number | boolean } = {};
-      if (!interaction.options)
-        return interaction.editReply(genericErrorMessage.reply);
-      for (let i = 0; i < interaction.options.data.length; i++) {
-        const element = interaction.options.data[i];
-        if (element.name && element.value)
-          options[element.name] = element.value;
-      }
+
+      const options = {
+        title: interaction.options.getString('título', true),
+        description: interaction.options.getString('descrição', true),
+        channel: interaction.options.getChannel('canal', true) as TextChannel,
+        color: interaction.options.getString('cor', true) as ColorResolvable,
+      };
+
       const embed = new EmbedBuilder()
-        .setColor(options.color.toString() as ColorResolvable)
-        .setTitle(options.title.toString())
-        .setDescription(options.description.toString())
-        .setAuthor({
-          name: interaction.client.user?.username || 'Default Name',
-          iconURL: interaction.client.user?.avatarURL() || undefined,
-        })
-        .setThumbnail(interaction.client.user?.avatarURL() || null)
-        .setTimestamp()
-        .setFooter({
-          text: 'Menssagem de teste do embed',
-          iconURL: interaction.client.user?.avatarURL() || undefined,
-        });
-      let selectedTextChannel = interaction.channel?.client.channels.cache.get(
-        options.channel.toString()
-      ) as TextChannel;
-      selectedTextChannel.send({ embeds: [embed] });
-      return interaction.editReply({
-        content: 'Embed enviado com sucesso.',
-      });
+        .setTitle(options.title)
+        .setDescription(options.description)
+        .setColor(options.color);
+
+      await options.channel.send({ embeds: [embed] });
+
+      await interaction.editReply('Embed enviado!');
     } catch (error) {
       interaction.editReply(genericErrorMessage.reply);
     }
