@@ -1,3 +1,4 @@
+import { color } from '../functions';
 import {
   Artwork,
   SearchOptions,
@@ -12,10 +13,12 @@ import encodeQueryParameter from '../utils/encodeQueryParameter';
 class Pixiv {
   private cookies: string;
   private userAgent: string;
+  private isLogged: boolean;
 
   constructor() {
     this.cookies = '';
     this.userAgent = '';
+    this.isLogged = false;
   }
   /**
    * Faz login na conta do pixiv.
@@ -25,20 +28,32 @@ class Pixiv {
   login(cookies: string, userAgent: string): void {
     this.cookies = cookies;
     this.userAgent = userAgent;
+    this.verifyCredentials();
   }
   /**
-   * Verifica se você está logado.
+   * Verifica se o Cookie e o User-Agent são válidos.
    * @returns {boolean} Um booleano.
    */
-  async isLogged(): Promise<boolean> {
-    const imageInfo = await this.getIllustById('66917649');
-    if (this.cookies !== '' && this.userAgent !== '') {
-      if (imageInfo.urls[0].mini) {
-        return true;
-      }
-    }
+  protected async verifyCredentials(): Promise<void> {
+    try {
+      const headers = [
+        ['User-Agent', this.userAgent],
+        ['Cookie', this.cookies],
+      ];
+      const illustNSFW = await fetch(
+        'https://www.pixiv.net/ajax/illust/114377289?lang=en',
+        { headers: headers }
+      );
 
-    return false;
+      if (illustNSFW.status === 200) {
+        console.log(color('text', '🖼️  Pixiv 18+ liberado!'));
+        this.isLogged = true;
+      } else {
+        console.log(color('error', '🖼️  Pixiv 18+ não disponível.'));
+      }
+    } catch (error) {
+      console.log(color('error', '🖼️  Pixiv 18+ não disponível.'));
+    }
   }
   /**
    * Faz uma busca por ilustrações utilizando uma ou mais tags.
@@ -143,18 +158,14 @@ class Pixiv {
    * @param {URL} url URL para fazer a requisição.
    * @returns {Promise<Response>} Uma requisição utilizando o fetch.
    */
-  fetch(url: URL): Promise<Response> {
-    const headers = [
-      [
-        'User-Agent',
-        this.userAgent != '' ? this.userAgent : 'Cloudflare Workers',
-      ],
-      [
-        'cookie',
-        this.cookies != '' && this.userAgent != '' ? this.cookies : '',
-      ],
-      ['Referer', 'https://www.pixiv.net/'],
+  protected async fetch(url: URL): Promise<Response> {
+    const loggedHeaders = [
+      ['User-Agent', this.userAgent],
+      ['Cookie', this.cookies],
+      ['Referer', 'https://www.pixiv.net/en/'],
     ];
+    const guestHeaders = [['Referer', 'https://www.pixiv.net/en/']];
+    const headers = this.isLogged ? loggedHeaders : guestHeaders;
 
     return fetch(url, { headers: headers });
   }
